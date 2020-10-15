@@ -1,0 +1,26 @@
+---
+
+version: '2.4'
+
+services:
+  jenkins:
+    image: "jenkins/jenkins:${JENKINS_IMAGE_TAG:-lts-alpine}"
+    container_name: "jenkins-sandbox"
+    entrypoint: "/entrypoint.sh"
+    restart: "unless-stopped"
+    volumes:
+      - ./jenkins_home:/var/jenkins_home
+      - ./docker/entrypoint.sh:/entrypoint.sh:ro
+      - ./init/init.groovy.d:/init.groovy.d:ro
+      - ./init/plugins.txt:/usr/share/jenkins/ref/plugins.txt:ro
+    environment:
+      JAVA_OPTS: "-Djava.awt.headless=true -Djenkins.install.runSetupWizard=false"
+      JENKINS_OPTS: "--prefix=/jenkins"
+      ADMIN_USERNAME: "admin"
+    ports:
+      - 127.0.0.1:8080:8080
+    logging:
+      driver: "json-file"
+      options:
+        max-file: "5"
+        max-size: "10m"

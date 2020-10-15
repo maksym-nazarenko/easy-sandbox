@@ -1,0 +1,8 @@
+---
+
+version: '2.4'
+
+services:
+  jenkins:
+    environment:
+      ADMIN_PASSWORD: "super-secret"
